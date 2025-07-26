@@ -3,20 +3,20 @@ from product.constans import NULLABLE
 
 class Category(models.Model):
     title=models.CharField(max_length=223,verbose_name='Название')
+    cover=models.ImageField(upload_to='media/category_covers')
     parent_category=models.ForeignKey('self',on_delete=models.CASCADE,**NULLABLE,verbose_name='Родительская категория')
     
+    def __str__(self):
+        ancestors = []
+        category = self
+        while category:
+            ancestors.append(category.title)
+            category = category.parent_category
+        return ' > '.join(reversed(ancestors))
     
 class Meta:
     verbose_name = 'Категория'
     verbose_name_plural = 'Категории'
-
-def __str__(self):
-    ancestors = []
-    category = self
-    while category:
-        ancestors.append(category.title)
-        category = category.parent_category
-    return ' > '.join(reversed(ancestors))
 
 
 class City(models.Model):
@@ -43,7 +43,7 @@ class Image(models.Model):
 class Estate(models.Model):
     title=models.CharField(max_length=223,verbose_name='Название')
     category = models.ForeignKey(Category, on_delete=models.PROTECT,verbose_name='Категория')
-    cover=models.ImageField(upload_to='media/products_image',verbose_name='Обложка')
+    cover = models.ImageField(upload_to='category_covers', verbose_name='Обложка')
     area=models.DecimalField(decimal_places=1,max_digits=12,verbose_name='Кол-во кв метров')
     city=models.ForeignKey(City,on_delete=models.PROTECT,verbose_name='Город')
     destrict= models.ForeignKey(District,on_delete=models.PROTECT,verbose_name='Район')
@@ -57,5 +57,5 @@ class Estate(models.Model):
     
     
 class Meta:
-    verbos_name='Недвижимость'
-    verbos_name='Недвижимости'
+    verbosе_name='Недвижимость'
+    verbosе_name='Недвижимости'
