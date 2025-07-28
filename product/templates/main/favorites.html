@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Избранные объявления</h2>
+
+<div class="row">
+  {% for estate in estates %}
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <img src="{{ estate.cover.url }}" class="card-img-top" alt="{{ estate.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ estate.title }}</h5>
+          <p class="card-text">{{ estate.price }} сом</p>
+          <a href="{% url 'detail' estate.pk %}" class="btn btn-primary">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>Вы еще не добавили объявления в избранное.</p>
+  {% endfor %}
+</div>
+{% endblock %}

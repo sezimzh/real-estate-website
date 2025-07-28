@@ -1,5 +1,6 @@
 from django.db import models
 from product.constans import NULLABLE 
+from user.models import MyUser
 
 class Category(models.Model):
     title=models.CharField(max_length=223,verbose_name='Название')
@@ -59,3 +60,18 @@ class Estate(models.Model):
 class Meta:
     verbosе_name='Недвижимость'
     verbosе_name='Недвижимости'
+
+
+class Favorite(models.Model):
+    user=models.ForeignKey(MyUser,on_delete=models.CASCADE)
+    estate=models.ForeignKey(Estate,on_delete=models.CASCADE)
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, verbose_name="Пользователь")
+    estate = models.ForeignKey(Estate, on_delete=models.CASCADE, related_name="comments", verbose_name="Объявление")
+    text = models.TextField(verbose_name="Комментарий")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    def __str__(self):
+        return f"{self.user} - {self.text[:30]}"

@@ -169,18 +169,32 @@
 
             <!-- Start Recent Work -->
              {% for estate in estates %}
-            <div class="col-xl-3 col-md-4 col-sm-6 project ui branding">
-                <a href="#" class="service-work card border-0 text-white shadow-sm overflow-hidden mx-5 m-sm-0">
-                    <img class="service card-img" src="{{ estate.cover.url }}" alt="Card image" style="height: 300px; object-fit: cover; width: 100%;">
-                    <div class="service-work-vertical card-img-overlay d-flex align-items-end">
-                        <div class="service-work-content text-left text-light">
-                            <span class="btn btn-outline-light rounded-pill mb-lg-3 px-lg-4 light-300">{{ estate.title | truncatechars:12}}</span>
-                            <p class="card-text">{{estate.description | truncatechars:20 }}</p>
-                        </div>
+<div class="col-xl-3 col-md-4 col-sm-6 project ui branding">
+    <div class="service-work card border-0 text-white shadow-sm overflow-hidden w-100 position-relative">
+        <a href="{% url 'detail' estate.id %}">
+            <img class="service card-img" src="{{ estate.cover.url }}" alt="Card image"/>
+            <div class="service-work-vertical card-img-overlay d-flex align-items-end">
+                <div class="service-work-content text-left text-light w-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-dark bg-opacity-50 text-white rounded-pill px-3 py-2 mb-2">
+                            {{ estate.title|truncatechars:25 }}
+                        </span>
+                        <a href="{% url 'estate_like' estate.id %}" class="text-white" style="margin-right: 5px;">
+                            {% if estate.id in liked_estates %}
+                                <i class="bx bxs-heart fs-4 text-danger"></i>  
+                            {% else %}
+                                <i class="bx bx-heart fs-4 text-white"></i>   
+                            {% endif %}
                     </div>
-                </a>
-            </div><!-- End Recent Work -->
-            {% endfor %}
+                    <p class="card-text">{{ estate.description|truncatechars:28 }}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endfor %}
+
+
             
         </div>
     </section>

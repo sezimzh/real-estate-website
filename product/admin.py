@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Image,City,District,Estate
+from .models import Category, Image,City,District,Estate,Favorite
 
 class EstateAdmin(admin.ModelAdmin):
     list_display=('title','category','city','created_at','is_active')
@@ -11,3 +11,4 @@ admin.site.register(Image)
 admin.site.register(City)
 admin.site.register(District)
 admin.site.register(Estate,EstateAdmin)
+admin.site.register(Favorite)

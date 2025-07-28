@@ -23,7 +23,7 @@
 
         <div class="row pt-5">
             <div class="worksingle-content col-lg-8 m-auto text-left justify-content-center">
-                <h2 class="worksingle-heading h3 pb-3 light-300 typo-space-line">Digital Marketing Service</h2>
+                <h2 class="worksingle-heading h3 pb-3 light-300 typo-space-line">{{ estate.title }}</h2>
                 <p class="worksingle-footer py-3 text-muted light-300">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -436,7 +436,35 @@
                     </div>
                 </div>
             </div>
+<div class="row justify-content-center">
+    <div class="worksingle-comment-heading col-8 m-auto pb-3">
+        <h4 class="h5">Комментарии</h4>
+    </div>
+</div>
 
+<div class="row pb-4">
+    <div class="col-md-8 m-auto">
+        {% for comment in comments %}
+            <div class="mb-3 p-3 border rounded">
+                <strong>{{ comment.user.username }}</strong>
+                <small class="text-muted">{{ comment.created_at }}</small>
+                <p>{{ comment.text }}</p>
+            </div>
+        {% empty %}
+            <p>Пока нет комментариев.</p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Оставить комментарий</button>
+            </form>
+        {% else %}
+            <p>Чтобы оставить комментарий, <a href="{% url 'login' %}">войдите в аккаунт</a>.</p>
+        {% endif %}
+    </div>
+</div>
     </article>
     <!-- End Related Post -->
 
