@@ -67,11 +67,18 @@ class Favorite(models.Model):
     estate=models.ForeignKey(Estate,on_delete=models.CASCADE)
 
 
-class Comment(models.Model):
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, verbose_name="Пользователь")
-    estate = models.ForeignKey(Estate, on_delete=models.CASCADE, related_name="comments", verbose_name="Объявление")
-    text = models.TextField(verbose_name="Комментарий")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+class Feedback(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    estate = models.ForeignKey(Estate, on_delete=models.CASCADE, related_name='feedbacks')
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user} - {self.text[:30]}"
+        return f'{self.user} - {self.estate}'
+
+
+class FeedbackResponse(models.Model):
+    user=models.ForeignKey(MyUser,on_delete=models.CASCADE)
+    feedback=models.ForeignKey(Feedback,on_delete=models.CASCADE,related_name='feedback_responses')
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

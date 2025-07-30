@@ -23,7 +23,8 @@
 
         <div class="row pt-5">
             <div class="worksingle-content col-lg-8 m-auto text-left justify-content-center">
-                <h2 class="worksingle-heading h3 pb-3 light-300 typo-space-line">{{ estate.title }}</h2>
+                <h2 class="worksingle-heading h3 pb-3 light-300 typo-space-line">{{ estate.title }}</h2><br>
+                <h2 class="worksingle-heading h3 pb-3 light-300 typo-space-line">{{ estate.category.title }}</h2>
                 <p class="worksingle-footer py-3 text-muted light-300">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -38,7 +39,7 @@
         <div class="row justify-content-center pb-4">
             <div class="col-lg-8">
                 <div id="templatemo-slide-link-target" class="card mb-3">
-                    <img class="img-fluid border rounded" src="{% static 'assets/img/work-slide-04.jpg' %}" alt="Card image cap">
+                    <img class="img-fluid border rounded" src="{{ estate.cover.url }}" alt="Card image cap">
                 </div>
                 <div class="worksingle-slide-footer row">
 
@@ -227,7 +228,7 @@
                 <h4 class="h5">Comments</h4>
             </div>
         </div>
-
+         {% for freedback in estate.feedbacks.all %}
         <div class="row pb-4">
             <div class="worksingle-comment-body col-md-8 m-auto">
                 <div class="d-flex">
@@ -237,131 +238,42 @@
                     <div class="comment-body">
                         <div class="comment-header d-flex justify-content-between ms-3">
                             <div class="header text-start">
-                                <h5 class="h6">John Doe</h5>
-                                <p class="text-muted light-300">10 mins ago</p>
+                                <h5 class="h6">{{ freedback.user.username}}</h5>
+                                <p class="text-muted light-300">{{ feedback.created_at|timesince }} назад</p>
                             </div>
-                            <a href="#" class="text-decoration-none text-secondary"><i class='bx bxs-share me-2'></i>Reply</a>
-                        </div>
-                        <div class="footer">
-                            <div class="card-body border ms-3 light-300">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco.
-                            </div>
+                        <button
+                          type="button"
+                          class="text-decoration-none text-secondary reply-btn"
+                          data-feedback-id="{{ feedback.id }}"
+                          data-bs-toggle="modal"
+                          data-bs-target="#replyModal"
+                        >
+                          <i class='bx bxs-share me-2'></i>Reply
+                        </button>
+                    </div>
+                    <div class="footer">
+                        <div class="card-body border ms-3 light-300">
+                            {{ feedback.comment }}
                         </div>
                     </div>
                 </div>
             </div>
-        </div><!-- End Comment -->
-
-
-        <div class="row pb-4">
-            <div class="col-lg-8 m-auto">
-                <div class="d-flex">
-                    <div>
-                        <img class="rounded-circle" src="{% static 'assets/img/team-01.jpg' %}" style="width: 50px;">
-                    </div>
-                    <div class="comment-body">
-                        <div class="comment-header d-flex justify-content-between ms-3">
-                            <div class="header text-start">
-                                <h5 class="h6">Jane Doe</h5>
-                                <p class="text-muted light-300">5 mins ago</p>
-                            </div>
-                            <a href="#" class="text-decoration-none text-secondary"><i class='bx bxs-share me-2'></i>Reply</a>
-                        </div>
-                        <div class="footer">
-                            <div class="card-body border ms-3 light-300">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- End Comment -->
-
-
-        <div class="row pb-4">
-            <div class="col-lg-8 m-auto">
-                <div class="d-flex ml-4">
-                    <div>
-                        <img class="rounded-circle" src="{% static 'assets/img/team-05.jpg' %}" style="width: 50px;">
-                    </div>
-                    <div class="comment-body">
-                        <div class="comment-header d-flex justify-content-between ms-3">
-                            <div class="header text-start">
-                                <h5 class="h6">John Doe</h5>
-                                <p class="text-muted light-300">15 mins ago</p>
-                            </div>
-                            <a href="#" class="text-decoration-none text-secondary"><i class='bx bxs-share me-2'></i>Reply</a>
-                        </div>
-                        <div class="footer">
-                            <div class="card-body border ms-3 light-300">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- End Comment -->
-
-
-        <div class="row pb-4">
-            <div class="col-lg-8 m-auto">
-                <div class="d-flex ml-5">
-                    <div>
-                        <img class="rounded-circle" src="{% static 'assets/img/team-01.jpg' %}" style="width: 50px;">
-                    </div>
-                    <div class="comment-body">
-                        <div class="comment-header d-flex justify-content-between ms-3">
-                            <div class="header text-start">
-                                <h5 class="h6">Jane Doe</h5>
-                                <p class="text-muted light-300">16 mins ago</p>
-                            </div>
-                            <a href="#" class="text-decoration-none text-secondary"><i class='bx bxs-share me-2'></i>Reply</a>
-                        </div>
-                        <div class="footer">
-                            <div class="card-body border ms-3 light-300">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- End Comment -->
-
+        </div>
+    </div>
+{% endfor %}
 
         <div class="row pb-4">
             <div class="worksingle-comment-footer col-lg-8 m-auto">
                 <h4 class="h5">Leave Comment</h4>
-                <form class="col-md-12 m-auto" method="POST" action="#" role="form">
-
+                <form class="col-md-12 m-auto" method="post" action="{% url 'feedback_create' estate.id %}" role="form">
+                {% csrf_token %}
                     <div class="form-group">
                         <label class="pb-2 pt-sm-0 pt-4 light-300" for="inputmessage">Your Comment</label>
-                        <textarea class="form-control form-control-lg light-300" id="inputmessage" name="inputmessage" placeholder="Your Comment" rows="5"></textarea>
+                        <textarea class="form-control form-control-lg light-300" id="inputmessage" name="comment" placeholder="Your Comment" rows="5"></textarea>
                     </div>
 
-                    <div class="row py-4">
-                        <div class="col-lg-6">
-                            <label class="pb-2 light-300" for="inputname">Name</label>
-                            <input type="text" class="form-control form-control-lg light-300" id="inputname" name="inputname" placeholder="Name">
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="pb-2 pt-sm-0 pt-4 light-300" for="inputemail">Email</label>
-                            <input type="email" class="form-control form-control-lg light-300" id="inputemail" name="inputemail" placeholder="Email">
-                        </div>
-                    </div>
-
-                    <div class="form-row pt-2">
-                        <div class="col-md-12 col-10 text-end">
-                            <button type="submit" class="btn btn-secondary text-white px-md-4 px-2 py-md-3 py-1 radius-0 light-300">Send Message</button>
-                        </div>
-                    </div>
+                    
+                        
                 </form>
             </div>
         </div><!-- End Comment Form -->
@@ -378,95 +290,86 @@
                 <div class="col-md-12 text-left justify-content-center">
                     <div class="row gx-5">
 
-
+                    {% for recommended_estate in recommended_estates %}
                         <div class="col-sm-6 col-lg-4 mb-5">
-                            <a href="#" class="related-content card text-decoration-none overflow-hidden h-100">
-                                <img class="related-img card-img-top" src="{% static 'assets/img/related-post-01.jpg' %}" alt="Card image cap">
+                            <a href="{% url 'detail' recommended_estate.id %}" class="related-content card text-decoration-none overflow-hidden h-100">
+                                <img class="related-img card-img-top" src="{{ recommended_estate.cover.url }}" alt="Card image cap">
                                 <div class="related-body card-body p-4">
-                                    <h5 class="card-title h6 m-0 semi-bold-600 text-dark">Digital Marketing</h5>
+                                    <h5 class="card-title h6 m-0 semi-bold-600 text-dark">{{ recommended_estate.title }}</h5>
                                     <p class="card-text pt-2 mb-1 light-300 text-dark">
                                         Lorem ipsum dolor sit amet, consectetur.
                                     </p>
                                     <div class="d-flex justify-content-between">
                                         <span class="text-primary light-300">Read more</span>
                                         <div class="light-300">
-                                            <i class='bx-fw bx bx-heart me-1'></i>5
+                                            <i class='bx-fw bx bx-heart me-1'></i>{{estate_like_count}}
                                             <i class='bx-fw bx bx-chat    ms-1 me-1'></i>3
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <div class="col-sm-6 col-lg-4 mb-5">
-                            <a href="#" class="related-content card text-decoration-none overflow-hidden h-100">
-                                <img class="related-img card-img-top" src="{% static 'assets/img/related-post-02.jpg' %}" alt="Card image cap">
-                                <div class="related-body card-body p-4">
-                                    <h5 class="card-title h6 m-0 semi-bold-600 text-dark">App Development</h5>
-                                    <p class="card-text pt-2 mb-1 light-300 text-dark">
-                                        Tempor incididunt ut labore et dolore.
-                                    </p>
-                                    <div class="d-flex justify-content-between">
-                                        <span class="text-primary light-300">Read more</span>
-                                        <div class="light-300">
-                                            <i class='bx-fw bx bx-heart me-1'></i>11
-                                            <i class='bx-fw bx bx-chat    ms-1 me-1'></i>9
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-sm-6 col-lg-4 mb-5">
-                            <a href="#" class="related-content card text-decoration-none overflow-hidden h-100">
-                                <img class="related-img card-img-top" src="{% static 'assets/img/related-post-03.jpg' %}" alt="Card image cap">
-                                <div class="related-body card-body p-4">
-                                    <h5 class="card-title h6 m-0 semi-bold-600 text-dark">Digital Marketing</h5>
-                                    <p class="card-text pt-2 mb-1 light-300 text-dark">
-                                        Consectetur adipiscing elit.
-                                    </p>
-                                    <div class="d-flex justify-content-between">
-                                        <span class="text-primary light-300">Read more</span>
-                                        <div class="light-300">
-                                            <i class='bx-fw bx bx-heart me-1'></i>31
-                                            <i class='bx-fw bx bx-chat    ms-1 me-1'></i>2
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                    {% endfor %}
+    
                     </div>
                 </div>
             </div>
-<div class="row justify-content-center">
-    <div class="worksingle-comment-heading col-8 m-auto pb-3">
-        <h4 class="h5">Комментарии</h4>
-    </div>
 </div>
-
-<div class="row pb-4">
-    <div class="col-md-8 m-auto">
-        {% for comment in comments %}
-            <div class="mb-3 p-3 border rounded">
-                <strong>{{ comment.user.username }}</strong>
-                <small class="text-muted">{{ comment.created_at }}</small>
-                <p>{{ comment.text }}</p>
-            </div>
-        {% empty %}
-            <p>Пока нет комментариев.</p>
-        {% endfor %}
-
-        {% if user.is_authenticated %}
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Оставить комментарий</button>
-            </form>
-        {% else %}
-            <p>Чтобы оставить комментарий, <a href="{% url 'login' %}">войдите в аккаунт</a>.</p>
-        {% endif %}
-    </div>
-</div>
-    </article>
     <!-- End Related Post -->
+<div class="modal fade" id="replyModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reply to Comment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="replyForm" method="post" action="" role="form">
+          {% csrf_token %}
+          <!-- если на бэкенде принимаете parent_id -->
+          <input type="hidden" name="parent_id" id="parent_id" value="">
+          <div class="form-group">
+            <label for="modalMessage">Your Reply</label>
+            <textarea
+              class="form-control form-control-lg"
+              id="modalMessage"
+              name="comment"
+              rows="5"
+              placeholder="Your reply…"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const textarea = document.getElementById('inputmessage');
+  textarea.addEventListener('keydown', function(event) {
+    // Проверяем, что нажата только Enter (без Shift/Ctrl/Alt)
+    if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey && !event.altKey) {
+      event.preventDefault();       // Отменяем вставку переноса
+      this.form.submit();           // Отправляем форму
+    }
+  });
+});
+const replyModalEl = document.getElementById('replyModal');
+  replyModalEl.addEventListener('show.bs.modal', event => {
+    // Кнопка, которая вызвала модалку
+    const btn = event.relatedTarget;
+    const feedbackId = btn.getAttribute('data-feedback-id');
 
-  {% endblock %}
+    // 1) Меняем action формы (пример URL: /estate/<estate_id>/feedback/<feedbackId>/reply/)
+    const form = replyModalEl.querySelector('#replyForm');
+    // если у вас есть именованный URL 'feedback_reply' с args estate.id, feedback.id
+    form.action = `{% url 'feedback_response' 0 %}`.replace('/0/', `/${}/`);
+
+    // 2) Или просто передаём родительский ID через hidden-поле
+    replyModalEl.querySelector('#parent_id').value = feedbackId;
+  });
+</script>
+</script>
+{% endblock %}
     

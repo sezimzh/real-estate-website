@@ -1,10 +1,10 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Category,Estate,Favorite
 from django.contrib.auth.decorators import login_required
-from .forms import CommentForm
-from .models import Comment
 from django.core.mail import send_mail
 from django.conf import settings
+from .models import Feedback,FeedbackResponse
+from django.contrib import messages
 
 def index_view(request):
     parent_categories = Category.objects.filter(parent_category__isnull=True)
@@ -44,25 +44,18 @@ def index_view(request):
     )
 def estate_detail_view(request,estate_pk):
     estate=get_object_or_404(Estate,id=estate_pk)
-    comments = Comment.objects.filter(estate=estate).order_by('-created_at')
-    form = CommentForm()
-
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated:
-            comment = form.save(commit=False)
-            comment.estate = estate
-            comment.user = request.user
-            comment.save()
-            return redirect('detail', estate_pk=estate_pk)
-
+    recommended_estates=Estate.objects.filter(category=estate.category).exclude(id=estate.id)
+    
+    estate_like_count=Favorite.objects.filter(estate=estate).count()
+    print(estate)
+    
     return render(
         request,
         'main/estate_detail.html',
         {
             'estate': estate,
-            'comments': comments,
-            'form': form,
+            'recommended_estates':recommended_estates,
+            'estate_like_count':estate_like_count
         }
     )
 def user_estate_like_view(request,estate_id):
@@ -87,3 +80,29 @@ def favorite_estates_view(request):
         template_name='main/favorites.html',
         context={'estates': estates}
     )
+def user_estate_feedback_view(request,estate_pk):
+    estate=get_object_or_404(Estate,id=estate_pk)
+    
+    
+    if request.method=='POST':
+        comment=request.POST['comment']
+        
+        Feedback.objects.create(
+            user=request.user,
+            estate=estate,
+            comment=comment
+        )
+        messages.success(request,'Комментарии добавлено')
+        return redirect('detail',estate.id)
+    
+def user_feedback_response_view(request,feedback_id):
+    feedback=get_object_or_404(Feedback,id=feedback_id)
+    if request.method =='POST':
+        comment=request.POST['comment']
+    FeedbackResponse.objects.create(
+        user=request.user,
+        feedback=feedback,
+        comment=comment
+    )
+    messages.success(request,'Комментарии добавлено')
+    return redirect('detail',feedback.estate.id)
