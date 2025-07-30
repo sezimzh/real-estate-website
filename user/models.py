@@ -70,4 +70,7 @@ class MyUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
-   
+class OTP(models.Model):
+    user=models.ForeignKey(MyUser,on_delete=models.CASCADE)
+    code=models.CharField(max_length=6)
+    created_at=models.DateTimeField(auto_now_add=True)

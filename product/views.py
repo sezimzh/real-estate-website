@@ -3,14 +3,35 @@ from .models import Category,Estate,Favorite
 from django.contrib.auth.decorators import login_required
 from .forms import CommentForm
 from .models import Comment
+from django.core.mail import send_mail
+from django.conf import settings
 
 def index_view(request):
-    parent_categories=Category.objects.filter(parent_category__isnull=True)
-    estates=Estate.objects.filter(is_active=True)[:8]
+    parent_categories = Category.objects.filter(parent_category__isnull=True)
+    estates = Estate.objects.filter(is_active=True)[:8]
+
     if request.user.is_authenticated:
-        liked_estates=Favorite.objects.filter(user=request.user).values_list('estate_id',flat=True)
+        liked_estates = Favorite.objects.filter(user=request.user).values_list('estate_id', flat=True)
         print(liked_estates)
+    else:
+        liked_estates = []  
+
+    return render(request, 'main/index.html', {
+        'parent_categories': parent_categories,
+        'estates': estates,
+        'liked_estates': liked_estates
+    })
     
+   
+    #send_mail(
+       # subject="Здравствуйте",
+       # message="Привет",
+       #from_email=settings.DEFAULT_FROM_EMAIL,
+      # recipient_list=['ashnld90@gmail.com'],
+       #fail_silently=False,
+    #)
+   
+   
    
     return render(
         request=request,

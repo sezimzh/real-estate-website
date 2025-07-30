@@ -1,8 +1,13 @@
-from django.shortcuts import render,redirect
-from .models import MyUser
+from django.shortcuts import render,redirect,get_object_or_404
+from .models import MyUser,OTP
 from .forms import MyUserRegisterForm,MyUserLoginForm
 from django.contrib import messages
 from django.contrib.auth import login,authenticate,logout
+from .services import generate_otp_code
+from django.core.mail import send_mail
+from django.conf import settings
+
+
 
 def user_register_view(request):
     if request.method=='POST':
@@ -42,14 +47,25 @@ def user_login_view(request):
             user= authenticate(request,username=user_email,password=user_password)
             
             
-            if user:
-                login(request,user)
-                messages.success(request,'Все классно')
-                return redirect('index')
-        
-        messages.error(request,'Неправильный логин или пароль')
-        
-        
+        if user:
+            otp_code = generate_otp_code()
+            OTP.objects.create(
+                user=user,
+                code=otp_code
+            )
+
+            send_mail(
+              subject="Одноразовый код для входа в систему ",
+              message=f"Ваш одноразовый код: {otp_code}\nНикому не показывайте этот код!",
+              from_email=settings.DEFAULT_FROM_EMAIL,
+             recipient_list=[user_email],
+              fail_silently=False,
+            )
+            messages.success(request, message='Одноразовый код отправлен на вашу почту')
+            return redirect('otp_verify',user.id)
+        else:
+           messages.error(request, "Пользователь не найден")
+
     return render(
         request=request,
         template_name='authentication/login.html',
@@ -61,3 +77,24 @@ def user_logout_views(request):
     logout(request)
     messages.success(request,'Вы успешно вышли из системы ')
     return redirect('index')
+
+
+def user_otp_verify_view(request,user_id):
+    user=get_object_or_404(MyUser,id=user_id)
+    
+    
+    if request.method=='POST':
+        otp_code=request.POST['otp']
+        otp=OTP.objects.filter(user=user,code=otp_code).last()
+        if otp:
+            login(request,user)
+            messages.success(request,'вы успешно вошли в систему')
+            otp.delete()   
+            return redirect('index')
+        else:
+           messages.error(request,'вы ввели неправильный код ')
+    
+    return render(
+        request=request,
+        template_name='authentication/otp_verify.html'
+    )
