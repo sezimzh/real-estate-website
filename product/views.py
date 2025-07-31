@@ -5,6 +5,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Feedback,FeedbackResponse
 from django.contrib import messages
+from django.core.paginator import Paginator
+from .models import Estate
+from .filters import EstateFilter
 
 def index_view(request):
     parent_categories = Category.objects.filter(parent_category__isnull=True)
@@ -106,3 +109,19 @@ def user_feedback_response_view(request,feedback_id):
     )
     messages.success(request,'Комментарии добавлено')
     return redirect('detail',feedback.estate.id)
+
+def estate_list_view(request):
+    estate=EstateFilter(request.GET,queryset=Estate.objects.filter(is_active=True))
+    paginator=Paginator(estate.qs,1)
+    page_number=request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+     
+    return render(
+        request=request,
+        template_name='main/estate_list.html',
+        context={
+            'estates':estate,
+            'page_obj': page_obj,
+            
+        }
+    )

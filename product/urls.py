@@ -8,4 +8,5 @@ urlpatterns = [
     path('favorites/', views.favorite_estates_view, name='favorites'),
     path('feedback/<int:estate_pk>/create/', views.user_estate_feedback_view, name='feedback_create'),
     path('feedback/response/<int:feedback_id>/create/', views.user_estate_feedback_view, name='feedback_response'),
+   path('estates_list/', views.estate_list_view, name='estate_list'),
 ]

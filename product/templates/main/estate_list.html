@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2 class="text-center my-4"></h2>
+
+
+<div class="text-center my-5">
+  <form method="get" action="." class="d-inline-block p-4 bg-light border rounded shadow-sm">
+    <div class="mb-3">
+      {{ estates.form.as_p }}
+    </div>
+    <button type="submit" class="btn btn-primary">Применить</button>
+  </form>
+</div>
+
+
+
+<div class="container">
+  <div class="row projects">
+    {% for estate in page_obj %}
+      <div class="col-md-4 mb-4 project {{ estate.category|lower }}">
+        <div class="card h-100">
+          <img src="{{ estate.cover.url }}" class="card-img-top" alt="{{ estate.title }}">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ estate.title }}</h5>
+            <h5 class="card-title light-300 text-dark">Категория:{{ estate.category.title }}</h5>
+            <p class="card-text">{{ estate.price }} сом</p>
+            <a href="{% url 'detail' estate.pk %}" class="btn btn-primary mt-auto">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center"></p>
+    {% endfor %}
+  </div>
+</div>
+
+
+<div class="d-flex justify-content-center mt-4">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if estates.form.data %}{{ estates.form.data.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">Предыдущая</a>
+      </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if estates.form.data %}{{ estates.form.data.urlencode }}&{% endif %}page={{ num }}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% if estates.form.data %}{{ estates.form.data.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">Следующая</a>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+
+{% endblock %}

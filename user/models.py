@@ -42,6 +42,7 @@ class MyUser(AbstractBaseUser):
     is_admin = models.BooleanField(
         default=False
     )
+    is_2fa_enabled=models.BooleanField(default=False)
     created_date=models.DateTimeField(auto_now=True)
     
     objects=MyUserManager()

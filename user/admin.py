@@ -63,6 +63,7 @@ class UserAdmin(BaseUserAdmin):
             'email',
             'avatar',
             'role',
+            'is_2fa_enabled',
             'balance')}),
         ('Permissions', {'fields': ('is_admin', )}),
     )

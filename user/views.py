@@ -6,7 +6,7 @@ from django.contrib.auth import login,authenticate,logout
 from .services import generate_otp_code
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.contrib.auth.decorators import login_required
 
 
 def user_register_view(request):
@@ -48,8 +48,9 @@ def user_login_view(request):
             
             
         if user:
-            otp_code = generate_otp_code()
-            OTP.objects.create(
+            if user.is_2fa_enabled:
+             otp_code = generate_otp_code()
+             OTP.objects.create(
                 user=user,
                 code=otp_code
             )
@@ -64,8 +65,12 @@ def user_login_view(request):
             messages.success(request, message='Одноразовый код отправлен на вашу почту')
             return redirect('otp_verify',user.id)
         else:
-           messages.error(request, "Пользователь не найден")
-
+            login(request,user)
+            messages.success(request,'Вы успешно вошли в систему')
+            return redirect('index')
+        
+        messages.error(request, "Пользователь не найден")
+        form=MyUserLoginForm()
     return render(
         request=request,
         template_name='authentication/login.html',
@@ -97,4 +102,19 @@ def user_otp_verify_view(request,user_id):
     return render(
         request=request,
         template_name='authentication/otp_verify.html'
+    )
+@login_required(login_url='user_login')
+def user_profile_view(request):
+    current_user=request.user
+    if request.method=="POST":
+        is_2fa_enabled='is_2fa_enabled' in request.POST
+        user=MyUser.objects.get(id=request.user.id)
+        user.is_2fa_enabled=is_2fa_enabled
+        user.save()
+    return render(
+        request=request,
+        template_name='authentication/user_profile.html',
+        context={
+            'user':current_user
+        }
     )
